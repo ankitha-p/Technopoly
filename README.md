@@ -1,4 +1,4 @@
-**Tehnopoly** is a website developed for hosting technical event for CBIT technical fest
+**Technopoly** is a website developed for hosting technical event for CBIT technical fest
 
 
 ## Technology
