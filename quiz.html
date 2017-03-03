@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Technopoly</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+  <script src="./js/angular.min.js"></script>
+  <link rel="stylesheet" href="./css/qstyle.css">  
+  <script>
+  var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope, $http) {
+    $http.get("data.html")
+    .then(function(response) {
+        $scope.myWelcome = response.data;
+        $scope.getClass = function(i) {
+
+        if(i==1) {
+          return "active";
+        }
+
+     };
+    });
+  });
+  </script>
+  </head>
+<body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="jumbotron text-center">
+  <h2>Quiz</h2>
+</div>
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false" data-wrap="false">
+  <!-- Indicators -->
+  <div ng-repeat="i in myWelcome" style="display: inline;">
+  <button class="btn btn-success" data-target="#myCarousel" data-slide-to="{{i.no-1}}">{{i.no}}</button>
+  </div>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+
+    <div class="item {{getClass(i.no)}}" ng-repeat="i in myWelcome" id="item{{i.no}}">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h2>{{i.Question}}</h2></div>
+        <div class="panel-body">
+          <div class="radio">
+            <label><input type="radio" name="optradio{{i.no}}">{{i.option1}}</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio" name="optradio{{i.no}}">{{i.option2}}</label>
+          </div>
+        </div>
+     </div>
+    </div>
+    
+  </div>
+
+  <!-- Left and right controls -->
+  <div>
+  <button class="btn btn-default" id="prev" href="#myCarousel" role="button" data-slide="prev" >previous</button>
+  <button class="btn btn-default" id="next" href="#myCarousel" role="button" data-slide="next">next</button>
+  </div>
+</div>
+
+<div class="container text-center">
+<a class="btn btn-success" id="submit" href="https://vsnikhil.typeform.com/to/cTHejI">Submit</a>
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Technopoly</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>  
+  <script src="./js/script.js"></script>  
+  <script src="./js/question.js"></script>  
+  <script src="./js/store.js"></script>  
+  <script src="./js/market.js"></script>  
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.min.js"></script>
+  <link rel="stylesheet" href="./css/style.css">  
+  <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./Hover/css/hover-min.css">
+  </head>
+<body ng-app="myApp" ng-controller="user">
+<a class="main" href="index.html" onclick="rev_trans()" id="main" onmouseover="disp()">
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-home fa-lg text-center" aria-hidden="true"></i><br/>Home</span>
+</a>
+</div>
+<a class="shop" href="#shop" id="shop" onclick="trans()" >
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-shopping-bag fa-lg text-center" aria-hidden="true"></i><br/>Shop</span>
+</a> 
+<a class="user " href="#user" id="user" onclick="trans();" ng-click="load()" >
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-user fa-lg text-center" aria-hidden="true"></i><br/>User</span> 
+</a> 
+<a class="market" href="#market"id="market" onclick="trans()">
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-money fa-lg text-center" aria-hidden="true"></i><br/>Market</span> 
+</a> 
+<a class="players" href="#players" id="players" onclick="trans();" style="display:none;" >
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-users fa-lg text-center" aria-hidden="true"></i><br/>Players</span> 
+</a>
+<a class="signout" href="#signout" id="signout" href="logout.php" onclick="window.location='./logout.php'" >
+<span class="hvr-buzz-out hvr-grow"><i class="fa fa-sign-out fa-lg text-center" aria-hidden="true"></i><br/>Logout</span> 
+</a> 
+<div class="vertical-spacer"></div>
+<div ng-view></div>
+</body>
+
+<script>
+    var qid=0,ans=[];
+var app = angular.module("myApp", ["ngRoute",'ngSanitize']);
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+      
+    })
+    .when("/shop", {
+        templateUrl : "shop.html",
+    })
+    .when("/market", {
+        templateUrl : "market.html",
+        controller : "market"
+    })
+    .when("/user", {
+        templateUrl : "user.html",
+        controller : "user-ques"
+    })
+    .when("/level1", {
+        templateUrl : "level.html",
+        controller : "level1"
+    })
+    .when("/level2", {
+        templateUrl : "level.html",
+        controller : "level2"
+    })
+    .when("/players", {
+        templateUrl : "players.html",
+        controller : "players"
+    })
+    .when("/level4", {
+        templateUrl : "level.html",
+        controller : "level4"
+    })
+    .when("/question", {
+        templateUrl : "question.html",
+        controller : "question"
+    })
+    .when("/level3", {
+        templateUrl : "level.html",
+        controller : "level3"
+    });
+});
+app.controller('level1', function($scope, $http) {
+    $http.get("questions.php?level=1")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+    $scope.buy = function(qid)
+    {
+        buyQuestion(qid);
+    }
+  });
+app.controller('level2', function($scope, $http) {
+    $http.get("questions.php?level=2")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+    $scope.buy = function(qid)
+    {
+        buyQuestion(qid);
+    }
+  });
+app.controller('level3', function($scope, $http) {
+    $http.get("questions.php?level=3")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+    $scope.buy = function(qid)
+    {
+        buyQuestion(qid);
+    }
+  });
+app.controller('level4', function($scope, $http) {
+    $http.get("questions.php?level=4")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+    $scope.buy = function(qid)
+    {
+        buyQuestion(qid);
+    }
+  });
+app.controller('market', function($scope, $http) {
+    $http.get("market-data.php")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+    $scope.buym = function(qid)
+    {
+        marketBuy(qid);
+    }
+  });
+app.controller('user-ques', function($scope, $http,$sce) {
+    $http.get("user-ques.php")
+    .then(function(response) {
+        $scope.data = response.data;
+        $scope.toHtml = function(html){ 
+         return $sce.trustAsHtml(html);
+       };
+       $scope.put = function(q){
+        qid=q;
+        };
+    });
+    $scope.load = function(){
+    $http.get("user-data.php")
+    .then(function(response) {
+        $scope.user = response.data;   
+    });
+    };
+    $scope.load();
+  });
+app.controller('question', function($scope, $http,$sce) {
+    $http.get("question.php?q="+qid)
+    .then(function(response) {
+        $scope.question = response.data;
+    });
+    $http.get("options.php?q="+qid)
+        .then(function(response) {
+        ans= response.data;
+        $scope.answers = ans;
+    });
+    $scope.toHtml = function(html){ 
+         return $sce.trustAsHtml(html);
+       };
+  });
+  app.controller('user', function($scope, $http) {
+    $scope.load = function(){
+    $http.get("user-data.php")
+    .then(function(response) {
+        $scope.user = response.data;   
+    });
+    };
+    $scope.load();
+  });
+  app.controller('players', function($scope, $http) {
+    $http.get("player-data.php")
+    .then(function(response) {
+        $scope.data = response.data;
+    });
+  });
+
+</script>
+
+</html>
