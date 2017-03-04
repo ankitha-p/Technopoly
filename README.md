@@ -8,7 +8,7 @@
 
 ## Screen Shots
 ![Alt text](./scrshots/scr1.png?raw=true "Home")
-![USer](./scrshots/scr2.png?raw=true "User")
+![USer](./scrshots/scr2.PNG?raw=true "User")
 
 ## Contact
 #### Developer/Projects spokesman
